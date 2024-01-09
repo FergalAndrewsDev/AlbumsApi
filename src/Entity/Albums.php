@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 
 #[ORM\Entity]
 #[ApiResource]
-class Album
+class Albums
 {
     #[GeneratedValue]
     #[Id, Column(type: 'integer')]
@@ -21,14 +20,23 @@ class Album
     #[Column(type: 'string', length: 150)]
     private string $name = "";
 
+    #[Column(type: 'text')]
+    private ?string $description = "";
+
     #[Column(type: 'string', length: 40)]
     private string $genre = "";
 
-    #[Column(type: 'text')]
-    private string $description = "";
+    #[ManyToOne(
+        targetEntity: "Artist",
+        cascade: ["all"],
+        fetch: "EAGER"
+    )]
+    private ?Artist $artist = null;
 
-    #[Column(type: 'date')]
-    private ?\DateTimeInterface $recordedDate = null;
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getName(): string
     {
@@ -40,6 +48,16 @@ class Album
         $this->name = $name;
     }
 
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
+    }
+
     public function getGenre(): string
     {
         return $this->genre;
@@ -49,27 +67,6 @@ class Album
     {
         $this->genre = $genre;
     }
-
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): void
-    {
-        $this->description = $description;
-    }
-
-    public function getRecordedDate(): ?\DateTimeInterface
-    {
-        return $this->recordedDate;
-    }
-
-    public function setRecordedDate(?\DateTimeInterface $recordedDate): void
-    {
-        $this->recordedDate = $recordedDate;
-    }
-
 
 
 }
