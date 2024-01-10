@@ -5,32 +5,32 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ApiResource]
-class Albums
+class Album
 {
     #[GeneratedValue]
     #[Id, Column(type: 'integer')]
     private ?int $id = null;
 
     #[Column(type: 'string', length: 150)]
+    #[Assert\NotBlank]
     private string $name = "";
 
     #[Column(type: 'text')]
     private ?string $description = "";
 
+    #[Assert\NotBlank]
     #[Column(type: 'string', length: 40)]
     private string $genre = "";
 
-    #[ManyToOne(
-        targetEntity: "Artist",
-        cascade: ["all"],
-        fetch: "EAGER"
-    )]
+    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'albums')]
     private ?Artist $artist = null;
 
     public function getId(): ?int
@@ -68,5 +68,13 @@ class Albums
         $this->genre = $genre;
     }
 
+    public function getArtist(): ?Artist
+    {
+        return $this->artist;
+    }
 
+    public function setArtist(?Artist $artist): void
+    {
+        $this->artist = $artist;
+    }
 }
