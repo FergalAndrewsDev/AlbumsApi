@@ -4,7 +4,14 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
@@ -12,7 +19,22 @@ use Doctrine\ORM\Mapping\Id;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GET(),
+        new GetCollection(),
+        new Post(),
+        new Patch(),
+        new Delete
+    ]
+)]
+#[ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'name' => 'partial',
+        'artist.name' => 'partial'
+    ]
+)]
 class Album
 {
     #[GeneratedValue]
