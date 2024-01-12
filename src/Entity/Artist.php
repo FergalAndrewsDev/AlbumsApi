@@ -18,6 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -26,8 +27,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GET(),
         new GetCollection(),
         new Post(),
-        new Patch()
-    ]
+        new Patch(),
+    ],
+    normalizationContext: ['groups' => ['artist.read']],
+    denormalizationContext: ['groups' => ['artist.write']],
 )]
 #[ApiFilter(
     SearchFilter::class, properties: ['name' => 'partial']
@@ -44,10 +47,12 @@ class Artist
 
     #[Column(type: 'string', length: 150)]
     #[Assert\NotBlank]
+    #[Groups(['album.read'])]
     private string $name = "";
 
     #[Column(type: 'datetime')]
     #[Assert\NotNull]
+    #[Groups(['artist.read'])]
     private ?\DateTimeInterface $formedDate = null;
 
     #[ORM\OneToMany(
