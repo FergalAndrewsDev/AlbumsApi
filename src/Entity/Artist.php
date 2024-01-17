@@ -35,11 +35,11 @@ use Symfony\Component\Validator\Constraints as Assert;
     paginationItemsPerPage: 5,
 )]
 #[ApiFilter(
-    SearchFilter::class, properties: ['name' => 'partial', 'formedDate' => 'DESC']
+    SearchFilter::class,
+    properties: ['name' => 'partial', 'formedDate' => 'DESC']
 )]
 class Artist
 {
-
     #[GeneratedValue]
     #[Id, Column(type: 'integer')]
     private ?int $id = null;

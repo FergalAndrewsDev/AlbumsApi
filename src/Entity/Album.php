@@ -35,7 +35,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(),
         new Post(),
         new Patch(),
-        new Delete,
+        new Delete(),
     ],
     normalizationContext: ['groups' => ['album.read']],
     denormalizationContext: ['groups' => ['album.write']],
