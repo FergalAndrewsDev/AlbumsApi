@@ -1,0 +1,6 @@
+App\Entity\Album:
+  album_{1..100}:
+    name: album_<firstName()>
+    description: <sentence(8)>
+    genre: <sentence(1)>
+    artist: '@artist_*'

@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                     fromProperty: 'artist',
                     fromClass: Album::class
                 )
-            ]
+            ],
         ),
         new GetCollection(),
         new Post(),
@@ -39,6 +39,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     normalizationContext: ['groups' => ['album.read']],
     denormalizationContext: ['groups' => ['album.write']],
+    paginationItemsPerPage: 5,
 )]
 #[ApiFilter(
     SearchFilter::class,
@@ -56,16 +57,16 @@ class Album
 
     #[Column(type: 'string', length: 150)]
     #[Assert\NotBlank]
-    #[Groups(['album.read'])]
+    #[Groups(['album.read', 'album.write'])]
     private string $name = "";
 
     #[Column(type: 'text')]
-    #[Groups(['album.read'])]
+    #[Groups(['album.read', 'album.write'])]
     private ?string $description = "";
 
     #[Assert\NotBlank]
     #[Column(type: 'string', length: 40)]
-    #[Groups(['album.read'])]
+    #[Groups(['album.read', 'album.write'])]
     private string $genre = "";
 
     #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'albums')]

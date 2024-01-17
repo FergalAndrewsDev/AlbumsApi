@@ -29,14 +29,13 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(),
         new Patch(),
     ],
+    formats: ['jsonld'],
     normalizationContext: ['groups' => ['artist.read']],
     denormalizationContext: ['groups' => ['artist.write']],
+    paginationItemsPerPage: 5,
 )]
 #[ApiFilter(
-    SearchFilter::class, properties: ['name' => 'partial']
-)]
-#[ApiFilter(
-    OrderFilter::class, properties: ['formedDate' => 'DESC']
+    SearchFilter::class, properties: ['name' => 'partial', 'formedDate' => 'DESC']
 )]
 class Artist
 {
@@ -47,12 +46,12 @@ class Artist
 
     #[Column(type: 'string', length: 150)]
     #[Assert\NotBlank]
-    #[Groups(['album.read'])]
+    #[Groups(['album.read', 'artist.write', 'artist.read'])]
     private string $name = "";
 
     #[Column(type: 'datetime')]
     #[Assert\NotNull]
-    #[Groups(['artist.read'])]
+    #[Groups(['artist.read', 'artist.write', 'artist.read'])]
     private ?\DateTimeInterface $formedDate = null;
 
     #[ORM\OneToMany(

@@ -1,0 +1,4 @@
+App\Entity\Artist:
+  artist_{1..10}:
+    name: artist_<name()>
+    formed_date: <dateTime()>
