@@ -9,7 +9,7 @@ use App\Entity\Album;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use ReflectionProperty;
 
-class AlbumTest  extends ApiTestCase
+class AlbumTest extends ApiTestCase
 {
     use RefreshDatabaseTrait;
 

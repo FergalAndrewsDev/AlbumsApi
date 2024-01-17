@@ -19,7 +19,8 @@ class ArtistTest extends ApiTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame(
-            'content-type', 'application/ld+json; charset=utf-8'
+            'content-type',
+            'application/ld+json; charset=utf-8'
         );
         $this->assertJsonContains([
             '@context' => '/api/contexts/Artist',
@@ -49,8 +50,7 @@ class ArtistTest extends ApiTestCase
                     'name' => 'test_artist',
                     'formedDate' => '1985-07-31T00:00:00+00:00',
                 ],
-            ]
-        );
+            ]);
 
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');

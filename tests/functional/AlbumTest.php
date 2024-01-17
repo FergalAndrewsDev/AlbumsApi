@@ -20,7 +20,8 @@ class AlbumTest extends ApiTestCase
         $this->assertResponseIsSuccessful();
 
         $this->assertResponseHeaderSame(
-            'content-type', 'application/ld+json; charset=utf-8'
+            'content-type',
+            'application/ld+json; charset=utf-8'
         );
 
         $this->assertJsonContains([
@@ -54,8 +55,7 @@ class AlbumTest extends ApiTestCase
                     'genre' => 'Rock/Pop',
                     'artist' => '/api/artists/4',
                 ],
-            ]
-        );
+            ]);
 
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
