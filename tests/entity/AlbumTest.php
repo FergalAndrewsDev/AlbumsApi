@@ -40,4 +40,20 @@ class AlbumTest extends ApiTestCase
 
         $this->assertSame($testAlbumName, $this->album->getName());
     }
+
+    public function testGetDescription(): void
+    {
+        $testDescription = 'Lorem ipsum';
+        $this->album->setDescription($testDescription);
+
+        $this->assertSame($testDescription, $this->album->getDescription());
+    }
+
+    public function testGetGenre(): void
+    {
+        $testGenre = 'Rock';
+        $this->album->setGenre($testGenre);
+
+        $this->assertSame($testGenre, $this->album->getGenre());
+    }
 }
