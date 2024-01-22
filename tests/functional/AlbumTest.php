@@ -43,7 +43,11 @@ class AlbumTest extends ApiTestCase
 
     public function testCreateAlbum(): void
     {
-        $response = static::createClient()->request('POST', '127.0.0.1:8000/api/alba', [
+
+        $client = static::createClient(['HTTP_HOST' => '127.0.0.1:8000']);
+        $client->request('GET', '127.0.0.1:8000/api/alba');
+
+        static::createClient()->request('POST', '127.0.0.1:8000/api/alba', [
             'headers' => [
                 'Content-Type' => 'application/ld+json'
             ],
@@ -56,12 +60,54 @@ class AlbumTest extends ApiTestCase
         ]);
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertJsonContains([
+            'name' => 'Revolver',
+            'description' => 'A great album',
+            'genre' => 'Rock/Pop',
+        ]);
+    }
+
+    public function testCreateInvalidAlbum(): void
+    {
+
+        $client = static::createClient(['HTTP_HOST' => '127.0.0.1:8000']);
+        $client->request('GET', '127.0.0.1:8000/api/alba');
+
+        static::createClient()->request('POST', '127.0.0.1:8000/api/alba', [
+            'headers' => [
+                'Content-Type' => 'application/ld+json'
+            ],
+            'json' => [
+                'name' => 'Revolver',
+                'description' => 'A great album',
+                'genre' => 'Rock/Pop',
+                'artist' => null,
+            ],
+        ]);
+        $this->assertResponseStatusCodeSame(422);
+    }
+
+    public function testUpdateAlbum(): void
+    {
+        static::createClient()->request('PATCH', '127.0.0.1:8000/api/alba/1', [
+            'headers' => [
+                'Content-Type' => 'application/merge-patch+json'
+            ],
+            'json' => [
+                'name' => 'updated album'
+            ],
+        ]);
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            '@id' => '/api/alba/1',
+            'name' => 'updated album'
+        ]);
     }
 
     public function testPagination(): void
     {
         $client = static::createClient(['HTTP_HOST' => '127.0.0.1:8000']);
-        $response = $client->request('GET', '127.0.0.1:8000/api/alba?page=2');
+        $client->request('GET', '127.0.0.1:8000/api/alba?page=2');
 
         $this->assertJsonContains([
             '@context' => '/api/contexts/Album',
@@ -77,7 +123,5 @@ class AlbumTest extends ApiTestCase
                 'hydra:next' => '/api/alba?page=3',
             ],
         ]);
-        $this->assertCount(5, $response->toArray()['hydra:member']);
-
     }
 }

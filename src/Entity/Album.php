@@ -69,8 +69,9 @@ class Album
     #[Groups(['album.read', 'album.write'])]
     private string $genre = "";
 
+    #[Assert\NotBlank]
     #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'albums')]
-    #[Groups(['album.read'])]
+    #[Groups(['album.read', 'album.write'])]
     private ?Artist $artist = null;
 
     public function getId(): ?int

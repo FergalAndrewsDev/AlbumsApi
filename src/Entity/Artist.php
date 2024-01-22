@@ -23,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity]
 #[ApiResource(
     operations: [
-        new GET(),
+        new Get(),
         new GetCollection(),
         new Post(),
         new Patch(),
@@ -50,7 +50,7 @@ class Artist
 
     #[Column(type: 'datetime')]
     #[Assert\NotNull]
-    #[Groups(['artist.read', 'artist.write', 'artist.read'])]
+    #[Groups(['album.read', 'artist.write', 'artist.read'])]
     private ?\DateTimeInterface $formedDate = null;
 
     #[ORM\OneToMany(

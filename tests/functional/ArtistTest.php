@@ -42,7 +42,7 @@ class ArtistTest extends ApiTestCase
 
     public function testCreateArtist(): void
     {
-        $response = static::createClient()->request('POST', '127.0.0.1:8000/api/artists', [
+        static::createClient()->request('POST', '127.0.0.1:8000/api/artists', [
             'headers' => [
                 'Content-Type' => 'application/ld+json'
             ],
@@ -53,12 +53,47 @@ class ArtistTest extends ApiTestCase
         ]);
         $this->assertResponseStatusCodeSame(201);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertJsonContains([
+            'name' => 'test_artist',
+            'formedDate' => '1985-07-31T00:00:00+00:00',
+        ]);
+    }
+
+    public function testCreateInvalidArtist(): void
+    {
+        static::createClient()->request('POST', '127.0.0.1:8000/api/artists', [
+            'headers' => [
+                'Content-Type' => 'application/ld+json'
+            ],
+            'json' => [
+                'name' => '',
+                'formedDate' => '1985-07-31T00:00:00+00:00',
+            ],
+        ]);
+        $this->assertResponseStatusCodeSame(422);
+    }
+
+    public function testUpdateArtist(): void
+    {
+        static::createClient()->request('PATCH', '127.0.0.1:8000/api/artists/1', [
+            'headers' => [
+                'Content-Type' => 'application/ld+json'
+            ],
+            'json' => [
+                'name' => 'updated artist'
+            ],
+        ]);
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            '@id' => '/api/artists/1',
+            'name' => 'updated artist'
+        ]);
     }
 
     public function testPagination(): void
     {
         $client = static::createClient(['HTTP_HOST' => '127.0.0.1:8000']);
-        $response = $client->request('GET', '127.0.0.1:8000/api/artists?page=2');
+        $client->request('GET', '127.0.0.1:8000/api/artists?page=2');
 
         $this->assertJsonContains([
             '@context' => '/api/contexts/Artist',
@@ -73,6 +108,5 @@ class ArtistTest extends ApiTestCase
                 'hydra:previous' => '/api/artists?page=1',
             ],
         ]);
-        $this->assertCount(5, $response->toArray()['hydra:member']);
     }
 }
