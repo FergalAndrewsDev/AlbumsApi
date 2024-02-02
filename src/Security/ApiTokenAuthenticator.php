@@ -55,9 +55,6 @@ class ApiTokenAuthenticator extends AbstractAuthenticator
                 return $user;
             })
         );
-
-
-
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
