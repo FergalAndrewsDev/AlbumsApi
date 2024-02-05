@@ -1,0 +1,4 @@
+App\Entity\ApiToken:
+  token1:
+    token: d6b31a9dc4f01b122cccfade3122386c850cf81cc2ee99e260fb380e9c15381d7fe1b55230cec6df21dba16d0318375b93c89acec38d91cd23c40f83
+    user: '@user1'
